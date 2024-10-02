@@ -1,9 +1,9 @@
-import './App.css'
-import AttendanceSheetPreview from './sheet';
+import React from 'react';
+import Sheet from './sheet';
 function App() {
   return (
-    <div className="App">
-      <AttendanceSheetPreview  />
+    <div>
+    <Sheet />
     </div>
   );
 }
