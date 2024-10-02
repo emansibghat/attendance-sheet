@@ -104,18 +104,22 @@ const Page = () => {
 const AddStudentsPage = () => {
   const [students, setStudents] = useState([]);
 
+ 
   useEffect(() => {
     const storedStudents = localStorage.getItem('students');
     if (storedStudents) {
-      setStudents(JSON.parse(storedStudents)); 
+      setStudents(JSON.parse(storedStudents));
     }
   }, []);
+
+  
   useEffect(() => {
     if (students.length > 0) {
       localStorage.setItem('students', JSON.stringify(students));
     }
   }, [students]);
 
+  
   const addNewStudent = () => {
     const newStudent = {
       id: students.length + 1,
@@ -123,10 +127,11 @@ const AddStudentsPage = () => {
       agNumber: '',
       status: 'Present'
     };
+
     setStudents([...students, newStudent]);
   };
 
-
+ 
   const handleInputChange = (id, field, value) => {
     const updatedStudents = students.map((student) =>
       student.id === id ? { ...student, [field]: value } : student
@@ -134,11 +139,15 @@ const AddStudentsPage = () => {
     setStudents(updatedStudents);
   };
 
- 
+
   const handleStatusChange = (id, newStatus) => {
     const updatedStudents = students.map((student) =>
       student.id === id ? { ...student, status: newStatus } : student
     );
+    setStudents(updatedStudents);
+  };
+  const deleteStudent = (id) => {
+    const updatedStudents = students.filter(student => student.id !== id);
     setStudents(updatedStudents);
   };
 
@@ -152,6 +161,7 @@ const AddStudentsPage = () => {
               <th style={thStyle}>Name</th>
               <th style={thStyle}>AG Number</th>
               <th style={thStyle}>Status</th>
+              <th style={thStyle}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -186,6 +196,16 @@ const AddStudentsPage = () => {
                     <option value="Late">Late</option>
                   </select>
                 </td>
+                <td style={tdStyle}>
+                  <button
+                    style={{ ...buttonStyle, backgroundColor: '#f44336' }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = '#e41f1f'}
+                    onMouseOut={(e) => e.target.style.backgroundColor = '#f44336'}
+                    onClick={() => deleteStudent(student.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -203,8 +223,10 @@ const AddStudentsPage = () => {
   );
 };
 
+
 const AppRoutes = () => (
   <Routes>
+    <Route path="/" element={<Page />}></Route>
     <Route path="/Page" element={<Page />} />
     <Route path="/add-students" element={<AddStudentsPage />} />
   </Routes>
